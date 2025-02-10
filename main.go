@@ -14,7 +14,7 @@ func main() {
 
 	apiV1 := app.Group("/api/v1")
 
-	user.SetupRoutes(apiV1)
+	user.RoutesV1(apiV1)
 
 	err := app.Listen(":5000")
 	if err != nil {
