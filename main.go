@@ -9,10 +9,6 @@ import (
 func main() {
 	app := fiber.New()
 
-	app.Get("/ping", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"message": "pong"})
-	})
-
 	apiV1 := app.Group("/api/v1", v1.ValidateHeader)
 
 	user.RoutesV1(apiV1)
