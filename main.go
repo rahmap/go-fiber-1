@@ -1,6 +1,7 @@
 package main
 
 import (
+	v1 "fiber-rest-api/middleware/v1"
 	"fiber-rest-api/module/user"
 	"github.com/gofiber/fiber/v2"
 )
@@ -12,7 +13,7 @@ func main() {
 		return c.JSON(fiber.Map{"message": "pong"})
 	})
 
-	apiV1 := app.Group("/api/v1")
+	apiV1 := app.Group("/api/v1", v1.ValidateHeader)
 
 	user.RoutesV1(apiV1)
 
