@@ -12,7 +12,9 @@ func main() {
 		return c.JSON(fiber.Map{"message": "pong"})
 	})
 
-	app.Get("/get-user", user.GetUser)
+	apiV1 := app.Group("/api/v1")
+
+	user.SetupRoutes(apiV1)
 
 	err := app.Listen(":5000")
 	if err != nil {
