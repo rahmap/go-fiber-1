@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fiber-rest-api/database"
 	v1 "fiber-rest-api/middleware/v1"
 	"fiber-rest-api/module/user"
 	"github.com/gofiber/fiber/v2"
@@ -8,6 +9,8 @@ import (
 
 func main() {
 	app := fiber.New()
+
+	database.ConnectDatabase()
 
 	apiV1 := app.Group("/api/v1", v1.ValidateHeader)
 

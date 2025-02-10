@@ -1,7 +1,11 @@
 package user
 
-import "github.com/gofiber/fiber/v2"
-import "fiber-rest-api/module/user/structs"
+import (
+	"fiber-rest-api/database"
+	"fiber-rest-api/module/user/model"
+	"fiber-rest-api/module/user/structs"
+	"github.com/gofiber/fiber/v2"
+)
 
 func GetUser(c *fiber.Ctx) error {
 	var request structs.FindByIdRequest
@@ -27,5 +31,22 @@ func GetUser(c *fiber.Ctx) error {
 			Name:    "Rahma AP",
 			Address: "Yogyakarta",
 		},
+	})
+}
+
+func GetUsers(c *fiber.Ctx) error {
+	var users []model.User
+	result := database.DB.Find(&users)
+	if result.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": result.Error.Error(),
+		})
+	}
+
+	return c.JSON(structs.UsersResponse{
+		Status:  true,
+		Message: "success",
+		Data:    users,
 	})
 }
