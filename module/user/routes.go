@@ -6,4 +6,5 @@ func RoutesV1(router fiber.Router) {
 	userGroup := router.Group("/user")
 	userGroup.Get("/find", GetUser)
 	userGroup.Get("/all", GetUsers)
+	userGroup.Post("/create", CreateUser)
 }

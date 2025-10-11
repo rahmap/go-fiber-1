@@ -50,3 +50,39 @@ func GetUsers(c *fiber.Ctx) error {
 		Data:    users,
 	})
 }
+
+func CreateUser(c *fiber.Ctx) error {
+	var user model.User
+
+	// Parse request body into user struct
+	if err := c.BodyParser(&user); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  false,
+			"message": "Invalid request body",
+		})
+	}
+
+	// Optional: Add validation logic here
+	if user.Name == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  false,
+			"message": "Name is required",
+		})
+	}
+
+	// Create user in the database
+	result := database.DB.Create(&user)
+	if result.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": result.Error.Error(),
+		})
+	}
+
+	// Return created user
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"status":  true,
+		"message": "User created successfully",
+		"data":    user,
+	})
+}
