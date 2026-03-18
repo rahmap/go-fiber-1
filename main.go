@@ -1,23 +1,18 @@
 package main
 
 import (
-	"fiber-rest-api/database"
-	v1 "fiber-rest-api/middleware/v1"
-	"fiber-rest-api/module/user"
-	"github.com/gofiber/fiber/v2"
+	"log"
+
+	"fiber-rest-api/internal/app"
 )
 
 func main() {
-	app := fiber.New()
-
-	database.ConnectDatabase()
-
-	apiV1 := app.Group("/api/v1", v1.ValidateHeader)
-
-	user.RoutesV1(apiV1)
-
-	err := app.Listen(":5000")
+	application, err := app.New()
 	if err != nil {
-		return
+		log.Fatalf("failed to initialize application: %v", err)
+	}
+
+	if err := application.Run(); err != nil {
+		log.Fatalf("failed to run application: %v", err)
 	}
 }
