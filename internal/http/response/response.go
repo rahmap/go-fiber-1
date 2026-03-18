@@ -8,6 +8,11 @@ type Envelope struct {
 	Data    interface{} `json:"data,omitempty"`
 }
 
+type ErrorEnvelope struct {
+	Status  bool   `json:"status" example:"false"`
+	Message string `json:"message" example:"invalid user id"`
+}
+
 func Success(c *fiber.Ctx, statusCode int, message string, data interface{}) error {
 	return c.Status(statusCode).JSON(Envelope{
 		Status:  true,
@@ -17,7 +22,7 @@ func Success(c *fiber.Ctx, statusCode int, message string, data interface{}) err
 }
 
 func Error(c *fiber.Ctx, statusCode int, message string) error {
-	return c.Status(statusCode).JSON(Envelope{
+	return c.Status(statusCode).JSON(ErrorEnvelope{
 		Status:  false,
 		Message: message,
 	})

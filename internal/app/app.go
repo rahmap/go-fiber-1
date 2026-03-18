@@ -10,6 +10,7 @@ import (
 	"fiber-rest-api/internal/platform/database"
 
 	"github.com/gofiber/fiber/v2"
+	swagger "github.com/gofiber/swagger"
 )
 
 type App struct {
@@ -32,6 +33,8 @@ func New() (*App, error) {
 	fiberApp := fiber.New(fiber.Config{
 		AppName: cfg.AppName,
 	})
+
+	fiberApp.Get("/swagger/*", swagger.HandlerDefault)
 
 	apiV1 := fiberApp.Group("/api/v1", middleware.ValidateToken(cfg.APIToken))
 	user.RegisterRoutes(apiV1, userHandler)

@@ -1,0 +1,157 @@
+basePath: /
+definitions:
+  response.ErrorEnvelope:
+    properties:
+      message:
+        example: invalid user id
+        type: string
+      status:
+        example: false
+        type: boolean
+    type: object
+  user.CreateRequest:
+    properties:
+      address:
+        example: Yogyakarta
+        type: string
+      age:
+        example: 24
+        type: integer
+      name:
+        example: Rahma AP
+        type: string
+    type: object
+  user.ItemEnvelope:
+    properties:
+      data:
+        $ref: '#/definitions/user.Response'
+      message:
+        example: success
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  user.ListEnvelope:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/user.Response'
+        type: array
+      message:
+        example: success
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  user.Response:
+    properties:
+      address:
+        example: Yogyakarta
+        type: string
+      age:
+        example: 24
+        type: integer
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Rahma AP
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Simple Fiber REST API with Swagger documentation for the user module.
+  title: Fiber REST API
+  version: "1.0"
+paths:
+  /api/v1/users:
+    get:
+      description: Returns all users from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ListEnvelope'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorEnvelope'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all users
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user in the database
+      parameters:
+      - description: Create user payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.CreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/user.ItemEnvelope'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorEnvelope'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorEnvelope'
+      security:
+      - ApiKeyAuth: []
+      summary: Create a user
+      tags:
+      - Users
+  /api/v1/users/{id}:
+    get:
+      description: Returns one user by path parameter
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ItemEnvelope'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorEnvelope'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorEnvelope'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorEnvelope'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user by ID
+      tags:
+      - Users
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: X-TOKEN
+    type: apiKey
+swagger: "2.0"
